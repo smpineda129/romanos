@@ -49,4 +49,11 @@ def descomponer(n: int) -> list:
     resultado.append(n)
     return resultado
 
+def de_romano_a_arabigo(romano: str) -> int:
+    resultado = 0
+    for letra in romano:
+        if letra in diccionario:
+            resultado += diccionario[letra]
+    return resultado
+
         
