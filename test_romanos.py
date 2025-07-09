@@ -47,4 +47,5 @@ Excepciones con pytest
 def test_orden_creciente_error():
     with pytest.raises(ValueError) as la_variable:
         de_romano_a_arabigo("VC")
-    assert "orden incorrecto" == str(la_variable.value)
+    assert "Orden Incorrecto" == str(la_variable.value)
+

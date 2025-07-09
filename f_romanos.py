@@ -51,9 +51,29 @@ def descomponer(n: int) -> list:
 
 def de_romano_a_arabigo(romano: str) -> int:
     resultado = 0
+    anterior = 0
+    ultimo_par = ""
     for letra in romano:
         if letra in diccionario:
-            resultado += diccionario[letra]
+            valor_actual = diccionario[letra]
+            ultimo_par += letra
+            if len(ultimo_par) > 2:
+                ultimo_par = ultimo_par[-2:]
+            if anterior > 0 and valor_actual > anterior:
+                resultado, anterior = valida_resta(ultimo_par, resultado, anterior)
+            else:
+                resultado += valor_actual
+                anterior = valor_actual
+        else:
+            raise ValueError("Símbolo no permitido")
     return resultado
+
+def valida_resta(cadena: str, resultado: int, anterior: int) -> tuple[int, int]:
+    if cadena in diccionario:
+        resultado = (resultado - anterior) + diccionario[cadena]
+        anterior = diccionario[cadena]
+        return resultado, anterior
+    else:
+        raise ValueError("Orden Incorrecto")
 
         
