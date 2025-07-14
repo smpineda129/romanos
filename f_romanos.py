@@ -29,6 +29,8 @@ diccionario = {
     "I": 1,
 }
 
+orden_romano = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
+
 def de_arabigo_a_romano(n: int) -> str:
     componentes = descomponer(n)
     resultado = ""
@@ -53,27 +55,63 @@ def de_romano_a_arabigo(romano: str) -> int:
     resultado = 0
     anterior = 0
     ultimo_par = ""
-    for letra in romano:
+    repeticiones = 1
+    restadores_usados = set()  # Aquí guardamos los símbolos que ya han sido usados en una resta
+
+    for i, letra in enumerate(romano):
         if letra in diccionario:
             valor_actual = diccionario[letra]
-            ultimo_par += letra
-            if len(ultimo_par) > 2:
-                ultimo_par = ultimo_par[-2:]
-            if anterior > 0 and valor_actual > anterior:
-                resultado, anterior = valida_resta(ultimo_par, resultado, anterior)
-            else:
-                resultado += valor_actual
-                anterior = valor_actual
+            ultimo_par = cadena_max_2(ultimo_par, letra)
+
+            if ultimo_par in ("IV", "IX", "XL", "XC", "CD", "CM"):
+                restador = ultimo_par[0]  # El símbolo que está restando
+
+                if restador in restadores_usados:
+                    raise ValueError("No se permiten restas repetidas con el mismo símbolo")
+
+                restadores_usados.add(restador)
+
+                if i + 1 < len(romano):
+                    siguiente = romano[i + 1]
+                    if orden_romano.index(siguiente) > orden_romano.index(letra):
+                        raise ValueError("No se permite encadenar restas o símbolos mayores después de una resta")
+
+            repeticiones = contador_repeticiones_max_3(valor_actual, anterior, repeticiones, letra)
+            resultado, anterior = calcula_numero(anterior, valor_actual, ultimo_par, resultado, letra)
         else:
             raise ValueError("Símbolo no permitido")
+
     return resultado
 
-def valida_resta(cadena: str, resultado: int, anterior: int) -> tuple[int, int]:
+    
+def cadena_max_2(cadena: str, letra: str) -> str:
+    cadena += letra
+    if len(cadena) > 2:
+        return cadena[-2:]
+    else:
+        return cadena
+    
+def contador_repeticiones_max_3(valor_actual: int, anterior: int, repeticiones: int, letra: str) -> int:
+    if valor_actual == anterior:
+        repeticiones += 1
+        if letra in ("V", "L", "D") and repeticiones > 1 or repeticiones > 3:
+            raise ValueError(f"No se admiten mas de {repeticiones - 1} repeticiones de {letra}")
+    else:
+        repeticiones = 1
+    return repeticiones 
+
+def calcula_numero(anterior: int, valor_actual: int, ultimo_par: str, resultado: int, letra:str) -> tuple[int, int]:
+    if anterior > 0 and valor_actual > anterior:
+        resultado, anterior = valida_resta(ultimo_par, resultado, anterior, letra) # Valida si es resta valida
+    else:
+        resultado += valor_actual
+        anterior = valor_actual
+    return resultado, anterior
+
+def valida_resta(cadena: str, resultado: int, anterior: int, letra:str) -> tuple[int, int]:
     if cadena in diccionario:
         resultado = (resultado - anterior) + diccionario[cadena]
         anterior = diccionario[cadena]
         return resultado, anterior
     else:
         raise ValueError("Orden Incorrecto")
-
-        
