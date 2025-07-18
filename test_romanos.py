@@ -1,6 +1,7 @@
 from f_romanos import de_arabigo_a_romano
 from f_romanos import descomponer   
 from f_romanos import de_romano_a_arabigo
+from f_romanos import to_groups_roman
 import pytest 
 
 def test_1976():
@@ -120,4 +121,24 @@ def test_resta_desordenada():
 def test_resta_repetida_I():
     with pytest.raises(ValueError):
         de_romano_a_arabigo("IVIX")  # 'I' usado dos veces como restador
+"""""
+def test_big_romans():
+    
+    assert de_arabigo_a_romano(4000000) == "IV**"
+    assert de_arabigo_a_romano(4004000) == "IV**IV*"
+    assert de_arabigo_a_romano(4004004) == "IV**IV*IV"
+    assert de_arabigo_a_romano(3004004) == "MMMIV*IV"
+    assert de_arabigo_a_romano(4000004) == "IV**IV"
+"""""
 
+@pytest.mark.parametrize("roman_number, tupla", [
+    ("IV*", [("IV", 1)]),
+    ("IV**", [("IV", 2)]),
+    ("IV**IV*", [("IV", 2), ("IV", 1)]),
+    ("IV**IV*IV", [("IV", 2), ("IV", 1)]),
+    ("MMMIV*IV", [("MMMIV", 1)]),
+    ("IV**IV", [("IV", 2)])
+])
+
+def test_to_arabic(roman_number, tupla):
+    assert to_groups_roman(roman_number) == tupla
