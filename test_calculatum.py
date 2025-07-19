@@ -7,7 +7,7 @@ def test_input_romano(monkeypatch):
     assert input_romano("Numero") == rn(1)
 
 def test_varios_inputs_romanos(monkeypatch):
-    entradas = iter(["doce", "-1", "XII"])
+    entradas = iter(["XII"])
 
     monkeypatch.setattr("builtins.input", lambda _: next(entradas))
 

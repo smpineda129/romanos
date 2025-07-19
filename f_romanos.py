@@ -102,15 +102,15 @@ def to_groups(number: int) -> list:
     result = []
 
     while number > 0:
-        resto = number % 1000
-        result.append(resto)
-        number = number // 1000
+        if number < 4000:
+            result.append(number)
+            number = 0
+        else: 
+            result.append(number % 1000)
+            number = number // 1000
 
-    if not result:
+    if not number:
         result[0]
-    elif result[0] < 4 and len(result) > 1:
-        result[1] = result[0] * 1000 + result[1]
-        result.pop(0)
 
     result = result[::-1]
 
