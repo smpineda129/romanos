@@ -1,23 +1,15 @@
 from roman_number import RomanNumber as rn
+from calculatum.presentacion import input_romano, input_operaciones
+from calculatum.logica import calcular
 
 total = rn(0)
 while True:
 
-    numero = input("Numero: ")
-    num1 = rn(numero.upper())
-
-    numero2 = input("Segundo número: ")
-    num2 = rn(numero2.upper())
-
-    operacion = input("Operación (+, -, x , /): ")
-    if operacion == "+":
-      resultado = num1 + num2
-    elif operacion == '-':
-       resultado = num1 - num2
-    elif operacion == 'x':
-       resultado =  num1 * num2
-    else:
-       resultado =  num1 / num2
+    numero = input_romano("Numero: ")
+    numero2 = input_romano("Segundo número: ")
+    operacion = input_operaciones("Operación (+, -, x , /): ")
+    
+    resultado = calcular(numero, numero2, operacion)
 
     print(f"Resultado: {resultado}")
 
