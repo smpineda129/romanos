@@ -1,6 +1,6 @@
 import random
 from roman_number import RomanNumber as rn
-from calculatum.presentacion import input_romano, input_operaciones
+from calculatum.presentacion import input_romano, input_operaciones, continuar_o_salir
 from calculatum.datos import OPERATION
 from calculatum.logica import calcular
 import pytest
@@ -55,4 +55,18 @@ def test_varios_inputs_romanos(monkeypatch):
 def test_calculos(num1, num2, op, result):
     assert calcular(num1, num2, op) == result
     
+@pytest.mark.parametrize(
+    "respuesta, resultado",
+    [
+        ("S", True),
+        ("s", True),
+        ("N", False),
+        ("n", False),
+        ("12", False),
+    ]
+)
+
+def test_continue(monkeypatch, respuesta, resultado):
+    monkeypatch.setattr("builtins.input", lambda _: respuesta)
+    continuar_o_salir("") == resultado
     

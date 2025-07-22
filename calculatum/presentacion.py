@@ -22,3 +22,6 @@ def input_operaciones(msg:str) -> op:
             return op(cadena)
         except ValueError: 
             print("Cadena no valida")
+
+def continuar_o_salir(msg: str) -> bool:
+    return input(msg).lower() == "s"
